@@ -1,0 +1,20 @@
+{
+  "name": "Financial App",
+  "short_name": "Financial App",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f5f6",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/90Gnp39P/gemini-svg-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.postimg.cc/PrjcqxGV/gemini-svg-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
