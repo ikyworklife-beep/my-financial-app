@@ -19,11 +19,18 @@
   </style>
 </head>
 <body>
+  <!-- Masukkan URL Web App Google Apps Script Anda yang berakhiran /exec di bawah ini -->
   <iframe src="https://script.google.com/macros/s/AKfycbxTjtUMKy3mtT-zh8OYSbiiBZxBJ-Dl1qvfh0HesLCFnneAY1wCU6zHCkV7u1s-hErU/exec"></iframe>
 
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
+      // Untuk mencegah Service Worker memblokir request ke Google Script, 
+      // kita biarkan kosong atau unregister jika error berlanjut.
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister();
+        }
+      });
     }
   </script>
 </body>
