@@ -6,26 +6,119 @@
   <title>Financial App</title>
   
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#10b981">
+  <!-- Replaced old green #10b981 with the immersive deep navy from the new icon -->
+  <meta name="theme-color" content="#0d0e26">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="icon" type="image/jpg" href="https://i.postimg.cc/j5rL50fT/Fix.jpg">
+  
+  <!-- Use your new image asset. PNG supports the transparency to prevent black corners -->
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/7YyhnysQ/1795194041537.jpg">
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/7YyhnysQ/1795194041537.jpg">
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #f4f5f6; }
-    iframe { width: 100%; height: 100%; border: none; display: block; }
+    /* Prevent scrolling, bounce effects, and unneeded margin offsets */
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html, body { 
+      width: 100%; 
+      height: 100%; 
+      overflow: hidden; 
+      background: #0d0e26; /* Changed base color to fit dark/transparent vibes */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Wrap in a fully-stretched box with standard IOS/Android safe area inset handles */
+    .app-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #0d0e26;
+      display: flex;
+      flex-direction: column;
+    }
+
+    iframe { 
+      flex-grow: 1;
+      width: 100%; 
+      height: 100%; 
+      border: none; 
+      display: block; 
+      background: transparent;
+    }
+
+    /* Elegant, premium Loading Indicator matching Gen Z style loop while app loads */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0d0e26;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.4s ease, visibility 0.4s;
+    }
+
+    .loading-overlay.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3.5px solid rgba(255, 255, 255, 0.08);
+      border-top-color: #3b82f6;
+      border-right-color: #db2777;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
-  <!-- Masukkan URL Web App Google Apps Script Anda yang berakhiran /exec di bawah ini -->
-  <iframe src="https://script.google.com/macros/s/AKfycbylMZM4VOMm71TLz8T3eeXE2fL4Bq-Y6EjbqOcR5gJsj5pg6ks2fOSB3mYhHINfEZ1Z/exec"></iframe>
+
+  <div class="app-container">
+    <!-- Visual cue during cold start to eliminate jarring blank loads -->
+    <div id="loader" class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Your Google Apps Script target link -->
+    <iframe 
+      id="appFrame"
+      src="https://script.google.com/macros/s/AKfycbylMZM4VOMm71TLz8T3eeXE2fL4Bq-Y6EjbqOcR5gJsj5pg6ks2fOSB3mYhHINfEZ1Z/exec"
+      onload="hideLoader()"
+    ></iframe>
+  </div>
 
   <script>
+    // Smooth transition away from the spinner once natural iframe load captures
+    function hideLoader() {
+      const loader = document.getElementById('loader');
+      if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(() => loader.remove(), 400);
+      }
+    }
+
+    // Safety timeout in case frame trigger gets hung or blocked by network errors
+    setTimeout(hideLoader, 5000);
+
+    // Dynamic standard unregistration sequence for offline Service Workers 
     if ('serviceWorker' in navigator) {
-      // Untuk mencegah Service Worker memblokir request ke Google Script, 
-      // kita biarkan kosong atau unregister jika error berlanjut.
       navigator.serviceWorker.getRegistrations().then(function(registrations) {
         for(let registration of registrations) {
           registration.unregister();
