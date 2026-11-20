@@ -3,6 +3,21 @@
   "short_name": "Financial",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f5f6",
-  "theme_color": "#10b981"
+  "orientation": "portrait",
+  "background_color": "#0d0e26",
+  "theme_color": "#0d0e26",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }
